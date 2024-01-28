@@ -23,17 +23,16 @@
 <meta property="og:site_name" content="北山">
 <meta property="og:description" content="makefile基础0. C语言文件编译流程。你必须明白！预编译-&gt;编译-&gt;汇编-&gt;链接  预编译所做的事情： C++文件：gcc -E [文件名.cpp] &gt; [预处理文件名.ii]：生成.ii文件 C语言文件：gcc -E [文件名.c] &gt; [预处理文件名.i]：生成.i文件  展开头文件 ：#include &lt;stdio.h&gt; 宏替换 去掉代码中的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/assets/image-20240127213443580.png">
 <meta property="og:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127213443580.png">
-<meta property="og:image" content="http://example.com/assets/image-20240127135051921.png">
-<meta property="og:image" content="http://example.com/assets/image-20240127224100507.png">
-<meta property="og:image" content="http://example.com/assets/v2-545a34b80f7822a51d87d62d703d1607_720w.webp">
-<meta property="og:image" content="http://example.com/assets/image-20240127225643538.png">
+<meta property="og:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127135051921.png">
+<meta property="og:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127224100507.png">
+<meta property="og:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/v2-545a34b80f7822a51d87d62d703d1607_720w.webp">
+<meta property="og:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127225643538.png">
 <meta property="article:published_time" content="2024-01-28T06:06:36.000Z">
-<meta property="article:modified_time" content="2024-01-28T08:10:02.920Z">
+<meta property="article:modified_time" content="2024-01-28T08:14:10.932Z">
 <meta property="article:author" content="Beishan">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/assets/image-20240127213443580.png">
+<meta name="twitter:image" content="http://example.com/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127213443580.png">
   
   
   
@@ -342,7 +341,6 @@
 </ol>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmd"># 示例代码<br>gcc -E main.c &gt; main.i<br>gcc -S main.i<br>gcc -c main.s<br>gcc main.o<br></code></pre></td></tr></table></figure>
 
-<p><img src="/assets/image-20240127213443580.png" srcset="/img/loading.gif" lazyload alt="image-20240127213443580"></p>
 <img src="/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127213443580.png" srcset="/img/loading.gif" lazyload class="">
 
 <hr>
@@ -355,7 +353,8 @@
 <li>如果target不存在或者target不是最新的，那么make会执行makefile文件中生成target所关联的命令，并根据需要递归地执行生成其他依赖文件的命令；</li>
 <li>如果target关联的某些源代码文件被修改，或者target的某些依赖文件缺失，那么make会执行命令生成最新的依赖文件，并执行makefile文件中生成target所关联的命令。</li>
 </ul>
-<p><img src="/assets/image-20240127135051921.png" srcset="/img/loading.gif" lazyload alt="image-20240127135051921"></p>
+<img src="/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127135051921.png" srcset="/img/loading.gif" lazyload class="">
+
 <hr>
 <h2 id="3-man-man-man-makefile！学会怎么使用makefile。"><a href="#3-man-man-man-makefile！学会怎么使用makefile。" class="headerlink" title="3. man man man makefile！学会怎么使用makefile。"></a>3. <strong>man man man makefile！</strong>学会怎么使用makefile。</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmd">make [选项] [目标] # 执行选定目标(target)命令<br>make # 默认执行第一个makefile命令<br></code></pre></td></tr></table></figure>
 
@@ -376,9 +375,11 @@
 <li>其余任何地方不能出现空格</li>
 <li>makefile文件中的注释用<code>#</code></li>
 </ul>
-<p><img src="/assets/image-20240127224100507.png" srcset="/img/loading.gif" lazyload alt="image-20240127224100507"></p>
+<img src="/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127224100507.png" srcset="/img/loading.gif" lazyload class="">
+
 <hr>
-<h2 id="4-用makefile命名你的makefile！禁止套娃！makefile编译过程。"><a href="#4-用makefile命名你的makefile！禁止套娃！makefile编译过程。" class="headerlink" title="4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。"></a>4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。</h2><p><img src="/assets/v2-545a34b80f7822a51d87d62d703d1607_720w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="4-用makefile命名你的makefile！禁止套娃！makefile编译过程。"><a href="#4-用makefile命名你的makefile！禁止套娃！makefile编译过程。" class="headerlink" title="4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。"></a>4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。</h2><img src="/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/v2-545a34b80f7822a51d87d62d703d1607_720w.webp" srcset="/img/loading.gif" lazyload class="">
+
 <p>当文件中同时存在<code>makefile</code>文件与<code>Makefile</code>文件时</p>
 <ul>
 <li>使用<code>make</code>命令会优先执行<code>makefile</code>文件。当没有找到<code>makefile</code>文件时，会转而寻找洽谈文件。</li>
@@ -402,7 +403,8 @@
 <h2 id="7-写一个makefile吧！"><a href="#7-写一个makefile吧！" class="headerlink" title="7. 写一个makefile吧！"></a>7. 写一个makefile吧！</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">main:main.o myAdd.o myDiv.o myMinus.o myMulti.o</span><br>	gcc main.o myAdd.o myDiv.o myMinus.o myMulti.o -o main<br><br><span class="hljs-section">myAdd.o:myAdd.c</span><br>	gcc -c myAdd.c -o myAdd.o<br><br><span class="hljs-section">myMinus.o:myMinus.c</span><br>	gcc -c myMinus.c -o myMinus.o<br><br><span class="hljs-section">myMulti.o:myMulti.c</span><br>	gcc -c myMulti.c -o myMulti.o<br><br><span class="hljs-section">myDiv.o:myDiv.c</span><br>	gcc -c myDiv.c -o myDiv.o<br><br><span class="hljs-section">main.o:main.c</span><br>	gcc -c main.c -o main.o<br><br><span class="hljs-section">clean:</span><br>	@rm -rf *.o main<br></code></pre></td></tr></table></figure>
 
 <p>首先，你得有这些：</p>
-<p><img src="/assets/image-20240127225643538.png" srcset="/img/loading.gif" lazyload alt="image-20240127225643538"></p>
+<img src="/2024/01/28/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/image-20240127225643538.png" srcset="/img/loading.gif" lazyload class="">
+
 <p>把上面的代码复制到makefile里面吧。</p>
 <p><strong>然后？make！</strong></p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">make<br></code></pre></td></tr></table></figure>
