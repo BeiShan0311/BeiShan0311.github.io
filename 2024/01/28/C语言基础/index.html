@@ -23,17 +23,17 @@
 <meta property="og:site_name" content="北山">
 <meta property="og:description" content="C语言基础0. 变量命名C语言变量命名规则  以字母或者下划线开始  由数字 字母 下划线组成  不能与C语言关键字相冲突 附.C语言32个关键字   变量命名的原则  见名知意   1. C语言基本数据类型计算机内存  一个字节(bytes) &#x3D; 8位(bits) 无符号：0~255 有符号：**-128~127。** 一个字节表示的数的最小值：0000 0000 for 0  mea">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/assets/pic.jpg">
-<meta property="og:image" content="http://example.com/assets/pic-1706016047455-4.jpg">
-<meta property="og:image" content="http://example.com/assets/image-20240125094618917.png">
+<meta property="og:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/pic.jpg">
+<meta property="og:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/pic-1706016047455-4.jpg">
+<meta property="og:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/image-20240125094618917.png">
 <meta property="og:image" content="http://example.com/assets/pic-1706251623850-3.jpg">
 <meta property="og:image" content="http://example.com/assets/image-20240126154436534.png">
 <meta property="og:image" content="http://example.com/assets/image-20240127213443580-1706429856754-6.png">
 <meta property="article:published_time" content="2024-01-28T08:16:49.000Z">
-<meta property="article:modified_time" content="2024-01-28T08:18:08.180Z">
+<meta property="article:modified_time" content="2024-01-28T08:20:27.422Z">
 <meta property="article:author" content="Beishan">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/assets/pic.jpg">
+<meta name="twitter:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/pic.jpg">
   
   
   
@@ -622,7 +622,8 @@
 <li><code>for</code> 一般用于循环次数已知或者可以预测的情况。</li>
 </ul>
 <p><code>for</code>循环执行顺序如下，初始化语句只执行一次：</p>
-<p><img src="/./assets/pic.jpg" srcset="/img/loading.gif" lazyload alt="pic"></p>
+<img src="/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/pic.jpg" srcset="/img/loading.gif" lazyload class="">
+
 <hr>
 <h2 id="8-C语言数组"><a href="#8-C语言数组" class="headerlink" title="8. C语言数组"></a>8. C语言数组</h2><ul>
 <li>数组一般是一个连续的地址空间。</li>
@@ -748,7 +749,8 @@
 <p>只有保存在内存空间中的数据才能与<code>&amp;</code>运算符结合，结合后得到的内容是当前数据所在的地址空间，是一个之战类型的数据。</p>
 <p><code>tip</code>：指针类型的数据本质就是<code>地址</code>，占<code>8个字节</code>，但是由于操作系统分页存储的原因，在打印时一般只显示6字节的地址内容，高16位表示页号。</p>
 <p><code>tip</code>：所有<code>指针</code>类型数据就是<code>地址</code>，<code>地址</code>也是<code>指针</code>类型的数据。但是指针所指向的内容要看指针所指向的内存空间的数据类型，可能是任意类型数据。</p>
-<p><img src="/./assets/pic-1706016047455-4.jpg" srcset="/img/loading.gif" lazyload alt="pic"></p>
+<img src="/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/pic-1706016047455-4.jpg" srcset="/img/loading.gif" lazyload class="">
+
 <p><strong>二级指针</strong></p>
 <ul>
 <li>二级指针的本质也是指针。</li>
@@ -756,7 +758,8 @@
 <li><code>*</code>作用于二级指针所得到的数据还是一个地址，或者说还是一个指针类型数据。</li>
 <li>二级指针指向的指针数据为<code>*ppa</code>，在内容上与<code>pa</code>相同。</li>
 </ul>
-<p><img src="/./assets/image-20240125094618917.png" srcset="/img/loading.gif" lazyload alt="image-20240125094618917"></p>
+<img src="/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/image-20240125094618917.png" srcset="/img/loading.gif" lazyload class="">
+
 <p><strong>使用指针</strong></p>
 <ul>
 <li><p>声明指针类型数据必须进行初始化，如果暂时不能确定指针所指向的地址空间，则需要对指针赋值<code>NULL</code>，指向地址空间<code>0x00</code>，但是这块地址空间是非法的，对这块内存空间进行任何操作都会导致段错误<code>Segmentation fault (core dumped)</code>。</p>
