@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/image-20240126154436534.png">
 <meta property="og:image" content="http://example.com/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/image-20240127213443580-1706429856754-6.png">
 <meta property="article:published_time" content="2024-01-28T08:16:49.000Z">
-<meta property="article:modified_time" content="2024-01-31T10:56:19.660Z">
+<meta property="article:modified_time" content="2024-01-31T11:54:41.228Z">
 <meta property="article:author" content="Beishan">
 <meta property="article:tag" content="C语言">
 <meta property="article:tag" content="Linux">
@@ -259,7 +259,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          5.3k 字
+          5.8k 字
         
       </span>
     
@@ -271,7 +271,7 @@
         
         
           <!-- compatible with older versions-->
-          44 分钟
+          49 分钟
         
       </span>
     
@@ -908,6 +908,72 @@
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmd"># 示例代码<br>gcc -E main.c &gt; main.i<br>gcc -S main.i<br>gcc -c main.s<br>gcc main.o<br></code></pre></td></tr></table></figure>
 
 <img src="/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/image-20240127213443580-1706429856754-6.png" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="19-C语言结构体"><a href="#19-C语言结构体" class="headerlink" title="19. C语言结构体"></a>19. C语言结构体</h2><ul>
+<li><h5 id="结构体的大小："><a href="#结构体的大小：" class="headerlink" title="结构体的大小："></a>结构体的大小：</h5><p>结构体数据的大小，会默认向结构体成员中最大的那个数据类型对齐。结构体的大小总会是最大的数据类型的大小的整数倍。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">StuInfo</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> age;                 <span class="hljs-comment">// 4</span><br>    <span class="hljs-type">int</span> sex;                 <span class="hljs-comment">// 1</span><br>    <span class="hljs-type">char</span> name[BUFFER_SIZE];  <span class="hljs-comment">// 32</span><br>    <span class="hljs-type">char</span> height;   			<span class="hljs-comment">// 1</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>C语言的结构体有独特的内存对齐机制。这样有利于快速查找某个结构体变量在内存空间中所在的位置。</p>
+<p>因此，打印上述代码结构体类型的大小，其结果会是40。</p>
+
+</li>
+<li><h5 id="结构体的声明"><a href="#结构体的声明" class="headerlink" title="结构体的声明"></a>结构体的声明</h5><ul>
+<li>使用<code>typedef</code>定义结构体的别名，下面都用这个别名来声明结构体。</li>
+<li>直接使用<code>struct [结构体名称]</code>来声明结构体。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">StuInfo</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> age;                <span class="hljs-comment">// 4</span><br>    <span class="hljs-type">int</span> sex;                <span class="hljs-comment">// 1</span><br>    <span class="hljs-type">char</span> name[BUFFER_SIZE]; <span class="hljs-comment">// 32</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> height;   <span class="hljs-comment">// 1</span><br>&#125; StuInfo;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">StuInfo</span> <span class="hljs-title">stu</span>;</span><br>    StuInfo stu1;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><h5 id="获取结构体成员变量"><a href="#获取结构体成员变量" class="headerlink" title="获取结构体成员变量"></a>获取结构体成员变量</h5><ul>
+<li>对于结构体变量，使用运算符<code>.</code>来获取结构体变量的某一个成员变量。</li>
+<li>对于结构体指针，使用运算符<code>-&gt;</code>来获取结构体指针所指向的那个结构体的成员变量。</li>
+</ul>
+
+</li>
+<li><p><strong>结构体作为函数参数</strong></p>
+<p>一般来说，结构体的大小会比较大，因此当结构体作为函数参数时，需要使用结构体指针来传递变量，这样既可以满足函数修改的需要，又可以节约系统带宽资源。</p>
+</li>
+<li><p><strong>需要特别注意的，结构体指针成员变量</strong></p>
+<p>当指针作为结构体成员变量时，声明结构体变量之后需要对这些结构体指针成员进行初始化。</p>
+<p>包括但不限于：</p>
+<ul>
+<li><code>malloc</code>初始化。</li>
+<li>判断<code>malloc</code>初始化是否成功。</li>
+<li>除脏数据。</li>
+</ul>
+</li>
+</ul>
+<h2 id="20-静态函数"><a href="#20-静态函数" class="headerlink" title="20. 静态函数"></a>20. 静态函数</h2><p>与其他函数不同，静态函数需要在源文件，即<code>.c</code>文件中进行声明与定义。声明与定义都在源文件宏定义的下方，其他函数的上方。</p>
+<p>与其他函数不同，静态函数只对程序员可见，因此在确定没有问题的情况下，静态函数传入的指针变量可以不进行判空。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 
               </div>
