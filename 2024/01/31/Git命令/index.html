@@ -19,20 +19,20 @@
     <meta name="description" content="Git 学习日记 零、 git底层的数据结构(图) 一、 git 工作区git的三个区： ​	1.工作区 红色 ​	2.暂存区 绿色 ​	3.对象区 紫色 从工作区部署git文档到暂存区：git add 从暂存区部署git文档到对象区：git commit -m &quot;[修改描述]&quot;，-m 添加此次修改描述 从对象区部署git文档到远程仓库：git push  二、git conf">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git基础">
-<meta property="og:url" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:url" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="北山">
 <meta property="og:description" content="Git 学习日记 零、 git底层的数据结构(图) 一、 git 工作区git的三个区： ​	1.工作区 红色 ​	2.暂存区 绿色 ​	3.对象区 紫色 从工作区部署git文档到暂存区：git add 从暂存区部署git文档到对象区：git commit -m &quot;[修改描述]&quot;，-m 添加此次修改描述 从对象区部署git文档到远程仓库：git push  二、git conf">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121212450933.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121214244010.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121211702346.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121220503060.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121221619194.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122091055610.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122095808331.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122101622967.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122101705848.png">
-<meta property="og:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122104305662.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121212450933.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121214244010.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121211702346.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121220503060.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121221619194.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122091055610.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122095808331.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122101622967.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122101705848.png">
+<meta property="og:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240122104305662.png">
 <meta property="article:published_time" content="2024-01-31T10:50:57.000Z">
 <meta property="article:modified_time" content="2024-01-31T11:14:41.269Z">
 <meta property="article:author" content="Beishan">
@@ -42,7 +42,7 @@
 <meta property="article:tag" content="Gitee">
 <meta property="article:tag" content="Github">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121212450933.png">
+<meta name="twitter:image" content="http://beishan.online/2024/01/31/Git%E5%91%BD%E4%BB%A4/image-20240121212450933.png">
   
   
   
@@ -84,7 +84,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"OjRqG0s1Fb0aE2a3tuluwAYC-gzGzoHsz","app_key":"QERTOcxYXnkuZ9xBlvZNdIxu","server_url":"https://ojrqg0s1.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"beishan.online","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"OjRqG0s1Fb0aE2a3tuluwAYC-gzGzoHsz","app_key":"QERTOcxYXnkuZ9xBlvZNdIxu","server_url":"https://ojrqg0s1.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -534,7 +534,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Git基础</div>
-      <div>http://example.com/2024/01/31/Git命令/</div>
+      <div>http://beishan.online/2024/01/31/Git命令/</div>
     </div>
     <div class="license-meta">
       
