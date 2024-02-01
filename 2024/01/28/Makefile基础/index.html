@@ -1,0 +1,971 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Beishan">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="makefile基础0. C语言文件编译流程。你必须明白！预编译-&gt;编译-&gt;汇编-&gt;链接  预编译所做的事情： C++文件：gcc -E [文件名.cpp] &gt; [预处理文件名.ii]：生成.ii文件 C语言文件：gcc -E [文件名.c] &gt; [预处理文件名.i]：生成.i文件  展开头文件 ：#include &lt;stdio.h&gt; 宏替换 去掉代码中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile基础">
+<meta property="og:url" content="http://beishan.online/2024/01/28/Makefile%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="北山">
+<meta property="og:description" content="makefile基础0. C语言文件编译流程。你必须明白！预编译-&gt;编译-&gt;汇编-&gt;链接  预编译所做的事情： C++文件：gcc -E [文件名.cpp] &gt; [预处理文件名.ii]：生成.ii文件 C语言文件：gcc -E [文件名.c] &gt; [预处理文件名.i]：生成.i文件  展开头文件 ：#include &lt;stdio.h&gt; 宏替换 去掉代码中的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-28T06:06:05.000Z">
+<meta property="article:modified_time" content="2024-02-01T09:19:19.482Z">
+<meta property="article:author" content="Beishan">
+<meta property="article:tag" content="C语言">
+<meta property="article:tag" content="Makefile">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="编译工具">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Makefile基础 - 北山</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"beishan.online","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"OjRqG0s1Fb0aE2a3tuluwAYC-gzGzoHsz","app_key":"QERTOcxYXnkuZ9xBlvZNdIxu","server_url":"https://ojrqg0s1.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>北山</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Makefile基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-28 14:06" pubdate>
+          星期日, 一月 28日 2024, 2:06 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Makefile基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="makefile基础"><a href="#makefile基础" class="headerlink" title="makefile基础"></a>makefile基础</h1><h2 id="0-C语言文件编译流程。你必须明白！"><a href="#0-C语言文件编译流程。你必须明白！" class="headerlink" title="0. C语言文件编译流程。你必须明白！"></a>0. C语言文件编译流程。你必须明白！</h2><p>预编译-&gt;编译-&gt;汇编-&gt;链接</p>
+<ol>
+<li><p>预编译所做的事情：</p>
+<p>C++文件：<code>gcc -E [文件名.cpp] &gt; [预处理文件名.ii]</code>：生成<code>.ii</code>文件</p>
+<p>C语言文件：<code>gcc -E [文件名.c] &gt; [预处理文件名.i]</code>：生成<code>.i</code>文件</p>
+<ul>
+<li>展开头文件 ：<code>#include &lt;stdio.h&gt;</code></li>
+<li>宏替换</li>
+<li>去掉代码中的注释</li>
+<li>条件编译</li>
+</ul>
+</li>
+<li><p>编译</p>
+<p><code>gcc -E [预处理文件名.i]</code>：生成<code>.s</code>文件(汇编文件)</p>
+</li>
+<li><p>汇编</p>
+<p><code>gcc -c [编译文件名.s]</code>：生成<code>.o</code>文件</p>
+</li>
+<li><p>链接</p>
+<p><code>gcc [汇编文件名.o]</code>：生成<code>.exe</code>文件</p>
+</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmd"># 示例代码<br>gcc -E main.c &gt; main.i<br>gcc -S main.i<br>gcc -c main.s<br>gcc main.o<br></code></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="2-一个make解决所有"><a href="#2-一个make解决所有" class="headerlink" title="2. 一个make解决所有"></a>2. 一个make解决所有</h2><p>在工作目录下有多个文件需要编译时，需要大量的编译时间。</p>
+<p>使用makefile编译程序，makefile只会编译工作目录中改动的部分代码。</p>
+<p>这也是使用makefile编译程序的核心目的。</p>
+<p><strong>用makefile节省你的工作时间。</strong></p>
+<ul>
+<li>如果target是最新生成的，那么make不会执行makefile文件中的任何命令；</li>
+<li>如果target不存在或者target不是最新的，那么make会执行makefile文件中生成target所关联的命令，并根据需要递归地执行生成其他依赖文件的命令；</li>
+<li>如果target关联的某些源代码文件被修改，或者target的某些依赖文件缺失，那么make会执行命令生成最新的依赖文件，并执行makefile文件中生成target所关联的命令。</li>
+</ul>
+
+
+<hr>
+<h2 id="3-man-man-man-makefile！学会怎么使用makefile。"><a href="#3-man-man-man-makefile！学会怎么使用makefile。" class="headerlink" title="3. man man man makefile！学会怎么使用makefile。"></a>3. <strong>man man man makefile！</strong>学会怎么使用makefile。</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmd">make [选项] [目标] # 执行选定目标(target)命令<br>make # 默认执行第一个makefile命令<br></code></pre></td></tr></table></figure>
+
+<p>一个makefile文件中包含多个makefile命令。</p>
+<p>一个完整的makefile命令包含：</p>
+<ol>
+<li>目标：<strong>target</strong></li>
+<li>依赖：<strong>dependence</strong></li>
+<li>命令：<strong>command</strong></li>
+</ol>
+<p>一个正确的makefile的基本格式：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">target:dependences1 dependences2……</span><br>&lt;tab&gt;commands1 commands2……<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：</p>
+<ul>
+<li>command列表中的每一个<strong>命令</strong>用<code>一个空格</code>隔开</li>
+<li>dependence列表中的每一个<strong>依赖</strong>用<code>一个空格</code>隔开</li>
+<li>其余任何地方不能出现空格</li>
+<li>makefile文件中的注释用<code>#</code></li>
+</ul>
+
+
+<hr>
+<h2 id="4-用makefile命名你的makefile！禁止套娃！makefile编译过程。"><a href="#4-用makefile命名你的makefile！禁止套娃！makefile编译过程。" class="headerlink" title="4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。"></a>4. 用makefile命名你的makefile！禁止套娃！makefile编译过程。</h2>
+
+<p>当文件中同时存在<code>makefile</code>文件与<code>Makefile</code>文件时</p>
+<ul>
+<li>使用<code>make</code>命令会优先执行<code>makefile</code>文件。当没有找到<code>makefile</code>文件时，会转而寻找洽谈文件。</li>
+<li>如果想要执行<code>Makefile</code>文件，需要使用<code>make -f Makefile</code>。</li>
+</ul>
+<p><strong>如果我写了很多个makefile文件，天知道我应该执行哪个！所以，只写一个叫makefile的makefile吧</strong></p>
+<hr>
+<h2 id="5-makefile选项，选择适合你的方式。"><a href="#5-makefile选项，选择适合你的方式。" class="headerlink" title="5. makefile选项，选择适合你的方式。"></a>5. makefile选项，选择适合你的方式。</h2><ul>
+<li><code>-f</code> 选择<code>makefile</code>文件作为<code>make</code>命令的输入文件。</li>
+<li><code>-B</code> 无条件执行所有目标。</li>
+<li><code>-n</code> 只打印命令不执行命令。</li>
+</ul>
+<hr>
+<h2 id="6-ERROR！是makefile的问题？不，是你的问题！"><a href="#6-ERROR！是makefile的问题？不，是你的问题！" class="headerlink" title="6. ERROR！是makefile的问题？不，是你的问题！"></a>6. ERROR！是makefile的问题？不，是你的问题！</h2><ul>
+<li>依赖和目标拼写错误。</li>
+<li><tab>写成了空格。</li>
+<li>重复编译同一目标。</li>
+<li>也许是其他文件的问题。</li>
+</ul>
+<hr>
+<h2 id="7-写一个makefile吧！"><a href="#7-写一个makefile吧！" class="headerlink" title="7. 写一个makefile吧！"></a>7. 写一个makefile吧！</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">main:main.o myAdd.o myDiv.o myMinus.o myMulti.o</span><br>	gcc main.o myAdd.o myDiv.o myMinus.o myMulti.o -o main<br><br><span class="hljs-section">myAdd.o:myAdd.c</span><br>	gcc -c myAdd.c -o myAdd.o<br><br><span class="hljs-section">myMinus.o:myMinus.c</span><br>	gcc -c myMinus.c -o myMinus.o<br><br><span class="hljs-section">myMulti.o:myMulti.c</span><br>	gcc -c myMulti.c -o myMulti.o<br><br><span class="hljs-section">myDiv.o:myDiv.c</span><br>	gcc -c myDiv.c -o myDiv.o<br><br><span class="hljs-section">main.o:main.c</span><br>	gcc -c main.c -o main.o<br><br><span class="hljs-section">clean:</span><br>	@rm -rf *.o main<br></code></pre></td></tr></table></figure>
+
+<p>首先，你得有这些：</p>
+
+
+<p>把上面的代码复制到makefile里面吧。</p>
+<p><strong>然后？make！</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">make<br></code></pre></td></tr></table></figure>
+
+<p>接下来会发生什么呢？</p>
+<p>首先。</p>
+<p>之前说过，一个<code>make</code>命令会优先找文件夹下有没有<code>makefile</code>文件。</p>
+<p>结果就是，找到了。</p>
+<p>可是你没有告诉<code>make</code>它的执行<code>目标(target)</code>。</p>
+<p>那么它会默认将第一个<code>target</code>作为它的生成目标。</p>
+<p>Oh！你的<code>target</code>叫<code>main</code>，你的最终目标是一个叫<code>main</code>的可执行文件。</p>
+<p>那么要用到那些文件来达成你这个目标呢？</p>
+<p><code>main.o</code> <code>myAdd.o</code> <code>myDiv.o</code> <code>myMinus.o</code> <code>myMulti.o</code> </p>
+<p>上面的就是你的<code>dependence</code>列表了。</p>
+<p>也就是生成你的<code>目标(target)</code>需要用到的<code>依赖(dependence)</code>。</p>
+<p>注意到它们之间有空格，这是必须的。</p>
+<p>接下来，编译？递归？或者说栈？</p>
+<p><code>make</code>会根据你的<code>makefile文件</code>中描述的<code>依赖(dependence)</code>关系来生成你的<code>目标(target)</code>。</p>
+<p>如果<code>目标(target)</code>的依赖下面还有依赖怎么办？</p>
+<p>那当然是一层层套娃，其实就是一个自下而上的<code>递归</code>，直到所有的<code>依赖(dependence)</code>都被满足了。</p>
+<p>这个目标才会被编译，而编译的过程就是递归调用一层一层<code>return</code>的过程。</p>
+<p>最终，你的目标(target)实现了！</p>
+<p>看看吧选择你的文件夹下多了一个<code>main</code>文件。</p>
+<p>执行它，就是你想要的结果。</p>
+<p>担心程序有bug？</p>
+<p>那你最好使用<code>-g</code>的编译语句来书写你的makefile。</p>
+<hr>
+<h2 id="8-全是字母？别担心，用变量吧。"><a href="#8-全是字母？别担心，用变量吧。" class="headerlink" title="8. 全是字母？别担心，用变量吧。"></a>8. 全是字母？别担心，用变量吧。</h2><ol>
+<li><p>系统变量</p>
+<ul>
+<li><p><code>$@</code>：表示目标文件的完整名称。</p>
+</li>
+<li><p><code>$^</code>：表示所有不重复的依赖文件</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 用$@替换上述代码中的目标文件，即[target]</span><br><span class="hljs-comment"># 用$……替换上述代码中的依赖文件，即[dependence]</span><br><span class="hljs-section">main:main.o myAdd.o myDiv.o myMinus.o myMulti.o</span><br>	gcc <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myAdd.o:myAdd.c</span><br>	gcc -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMinus.o:myMinus.c</span><br>	gcc -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMulti.o:myMulti.c</span><br>	gcc -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myDiv.o:myDiv.c</span><br>	gcc -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">main.o:main.c</span><br>	gcc -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">clean:</span><br>	@rm -rf *.o main<br></code></pre></td></tr></table></figure>
+
+</li>
+<li><p>系统常量</p>
+<ul>
+<li><p><code>RM</code>：删除</p>
+</li>
+<li><p><code>CC</code>：C语言编译程序</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 用$(CC)替换上述代码中的gcc编译命令</span><br><span class="hljs-section">main:main.o myAdd.o myDiv.o myMinus.o myMulti.o</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myAdd.o:myAdd.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMinus.o:myMinus.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMulti.o:myMulti.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myDiv.o:myDiv.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">main.o:main.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">clean:</span><br>	@<span class="hljs-variable">$(RM)</span> *.o main<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>自定义变量</p>
+<ul>
+<li>使用<code>[常量名]=[值]</code>的形式定义自定义常量</li>
+<li>使用<code>$()</code>取自定义变量的值</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs makefile">OBJS=main.o myAdd.o myDiv.o myMinus.o myMulti.o<br><span class="hljs-comment"># 变量自定义赋值</span><br>TARGET=main<br><br><span class="hljs-comment"># 变量取值用$()</span><br><span class="hljs-variable">$(TARGET)</span>:<span class="hljs-variable">$(OBJS)</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myAdd.o:myAdd.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMinus.o:myMinus.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myMulti.o:myMulti.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">myDiv.o:myDiv.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">main.o:main.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-section">clean:</span><br>	@<span class="hljs-variable">$(RM)</span> *.o main<br></code></pre></td></tr></table></figure>
+
+<p>这只是一些简单的变量，其他的等待后续补充吧。</p>
+<p>是不是简单了很多？别担心，还会更简单的！</p>
+</li>
+</ol>
+<hr>
+<h2 id="9-还是有太多冗余了，也许我该考虑更好的方法。模式匹配是个不错的选择。"><a href="#9-还是有太多冗余了，也许我该考虑更好的方法。模式匹配是个不错的选择。" class="headerlink" title="9. 还是有太多冗余了，也许我该考虑更好的方法。模式匹配是个不错的选择。"></a>9. 还是有太多冗余了，也许我该考虑更好的方法。模式匹配是个不错的选择。</h2><p>一些简单的简单的<code>makefile模式匹配</code></p>
+<ul>
+<li><p><code>%[目标]:%[依赖]</code>：我想不用我解释了。</p>
+</li>
+<li><p><code>wildcard</code>：匹配文件。</p>
+<p>使用实例：获取指定目录下所有的.c文件。</p>
+</li>
+<li><p><code>patsubst</code>：模式匹配与替换。</p>
+<p>使用实例：指定目录下所有的.c文件替换成.o文件。</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 使用文件匹配替换依赖[dependence]</span><br>OBJS=<span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.c, %.o, $(<span class="hljs-built_in">wildcard</span> ./*.c)</span>)<br><span class="hljs-comment"># 变量自定义赋值</span><br>TARGET=main<br><br><span class="hljs-comment"># 变量取值用$()</span><br><span class="hljs-variable">$(TARGET)</span>:<span class="hljs-variable">$(OBJS)</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-comment"># 模式匹配 %[目标]:%[依赖]</span><br><span class="hljs-section">%.o:%.c</span><br>	<span class="hljs-variable">$(CC)</span> -c <span class="hljs-variable">$^</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-comment"># 伪目标(伪文件)，指执行命令，不生成文件</span><br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: clean</span><br><br><span class="hljs-section">clean:</span><br>	@<span class="hljs-variable">$(RM)</span> *.o main<br><br><span class="hljs-comment"># `wildcard`：匹配文件 ()</span><br><span class="hljs-comment"># `patsubst`：模式匹配与替换</span><br><span class="hljs-section">show:</span><br>	@echo <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> ./*.c)</span><br>	@echo <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.c, %.o, $(<span class="hljs-built_in">wildcard</span> ./*.c)</span>)<br></code></pre></td></tr></table></figure>
+
+<p><code>tip</code>：有个小概念，什么是伪目标？或者该叫他伪文件。</p>
+<p>所有的目标(target)最终都会生成一个同名的目标文件。</p>
+<p>也许有时候我不希望它生成。</p>
+<p>这个时候就可以用<code>.PHONY: clean</code>来修饰这个<code>目标(target)</code>。</p>
+<p>当需要生成这个<code>目标(target)</code>时，不会生成文件，而只是执行命令。</p>
+<hr>
+<h2 id="10-Triple-Star！最重要的一集。makefile动态库。"><a href="#10-Triple-Star！最重要的一集。makefile动态库。" class="headerlink" title="10. Triple Star！最重要的一集。makefile动态库。"></a>10. Triple Star！最重要的一集。makefile动态库。</h2><p>最无聊的概念时间：</p>
+<p>动态库就是：<code>windows</code>中的<code>.dll</code>文件，<code>linux</code>中的<code>.so</code>文件。</p>
+<p>那么它有什么特点？</p>
+<p>不会把代码编译到二进制文件中，而是在运行时候才会去加载，所以只需要一个地址。</p>
+<p>不会编译成二进制文件？也就是不能反向学习了。</p>
+<p><em><strong>用于生成动态库的编译常用参数：</strong></em></p>
+<ul>
+<li><p><code>-fPIC</code> 产生位置无关的代码。</p>
+</li>
+<li><p><code>-shared</code> 共享。</p>
+</li>
+<li><p><code>-l</code> (小写L)，手动指定动态库。</p>
+</li>
+<li><p><code>-I</code> (大写i)，指定头文件目录，默认当前目录.</p>
+</li>
+<li><p><code>-L</code> 手动指定库文件搜索目录, 默认只链接共享目录。</p>
+</li>
+</ul>
+<p>如何生成一个动态库？</p>
+<p><code>gcc -c [源文件名].c -o [自定义文件名].o</code></p>
+<p><code>gcc -shared -fPIC [待生成文件名].o -o [lib生成文件名].so</code></p>
+<p><strong>必须是<code>.o</code>文件！</strong></p>
+<p><strong>必须是<code>.o</code>文件！！</strong></p>
+<p><strong>必须是<code>.o</code>文件！！！</strong></p>
+<p>这样就好了。</p>
+<p>当然了作为动态库文件，命名时必须以<code>lib</code>开头，自定义但没有完全自定义。</p>
+<p>生成好了，没有报错，怎么用？</p>
+<p>正确的：<code>gcc *.c -lMyAdd -L./ -o main</code></p>
+<p>错误的：<code>gcc -o main main.c -L./ -lMyAdd</code></p>
+<p><strong>注意命令顺序</strong></p>
+<p>还是一个命令解决。</p>
+<p>这样就使用生成的动态库文件编译好了一个程序。</p>
+<p>但是出错了？意料之中，这里有两个简单的解决办法。</p>
+<p>运行时手动指定动态库目录：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cmd"><span class="hljs-function">MacOS:</span><br><span class="hljs-function"><span class="hljs-title">DYLD_LIBRARY_PATH</span>=./<span class="hljs-title">src_so</span></span><br><span class="hljs-function"><span class="hljs-title">export</span> <span class="hljs-title">DYLD_LIBRARY_PATH</span></span><br><span class="hljs-function"><span class="hljs-title">Linux</span>:</span><br><span class="hljs-function"><span class="hljs-title">LD_LIBRARY_PATH</span>=./<span class="hljs-title">src_so</span></span><br><span class="hljs-function"><span class="hljs-title">export</span> <span class="hljs-title">DYLD_LIBRARY_PATH</span></span><br></code></pre></td></tr></table></figure>
+
+<p><code>cp libMyAdd.so /usr/lib/</code>将文件拷贝到<code>/usr/lib/</code>文件夹下。</p>
+<p>还是不行？</p>
+<p>问<a target="_blank" rel="noopener" href="https://chat18.aichatos.xyz/#/chat/1706331925787"><code>OpenAI</code></a>吧。</p>
+<p>但是尽量跟用户手册搭配使用哦。</p>
+<h2 id="11-世界是绝对的运动和相对的静止。makefile静态库！-我都懒得提"><a href="#11-世界是绝对的运动和相对的静止。makefile静态库！-我都懒得提" class="headerlink" title="11. 世界是绝对的运动和相对的静止。makefile静态库！(我都懒得提)"></a>11. 世界是绝对的运动和相对的静止。makefile静态库！(我都懒得提)</h2><p>静态链接库的生成方式：</p>
+<p><code>target</code>为以<code>.a</code>为后缀名的文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(AR)</span> -r <span class="hljs-variable">$(target)</span> <span class="hljs-variable">$^</span><br></code></pre></td></tr></table></figure>
+
+<p>如何使用静态库或者动态库，：</p>
+<p><code>gcc *.c -lMyAdd -L./ -o main</code></p>
+<p><strong>注意命令的书写书序，一定是动态或者静态库文件在其他文件之前。</strong></p>
+<p>静态链接库：会把静态库的代码编译到二进制中，当程序编译完成后，该文件可以删除。</p>
+<p>缺点： 程序体积过大，并且库中的内容如果有更新，则需要重新编译生成程序。</p>
+<p>只有缺点？</p>
+<p>是的，只有缺点。</p>
+<p>所以，别用了。</p>
+<p>你问我玩意用到了？</p>
+<p><a target="_blank" rel="noopener" href="https://chat18.aichatos.xyz/#/chat/1706331925787"><code>OpenAI</code></a>吧，别烦了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" class="category-chain-item">开发工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C%E8%AF%AD%E8%A8%80/" class="print-no-link">#C语言</a>
+      
+        <a href="/tags/Makefile/" class="print-no-link">#Makefile</a>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="/tags/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" class="print-no-link">#编译工具</a>
+      
+        <a href="/tags/C-C/" class="print-no-link">#C/C++</a>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Makefile基础</div>
+      <div>http://beishan.online/2024/01/28/Makefile基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Beishan</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/28/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/" title="C语言基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C语言基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"OjRqG0s1Fb0aE2a3tuluwAYC-gzGzoHsz","appKey":"QERTOcxYXnkuZ9xBlvZNdIxu","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
